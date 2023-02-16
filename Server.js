@@ -3,12 +3,13 @@
 
 import { getToken, isSeller, isAuth } from "./Middleware.js";
 import { Users, Product, Order } from "./Model.js";
-import Stripe from "stripe";
 import bodyParser from "body-parser";
 import Mongoose from "mongoose";
 import Express from "express";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import Stripe from "stripe";
+import cors from "cors";
 
 dotenv.config();
 
@@ -20,11 +21,17 @@ Mongoose.connect(MONGODB_URL, {
     useUnifiedTopology: true,
     useCreateIndex: true
 
-}).catch(error => console.log(error.reason));
+})
+    .then(() => App.listen(process.env.PORT || 5000))
+    .catch(error => console.log(error.reason));
 
 const App = Express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
+App.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true
+}));
 App.use(bodyParser.json({ limit: "50mb" }));
 
 App.post("/API/Users/SignUp", async (req, res) => {
@@ -365,5 +372,3 @@ App.post("/API/Orders/Dispatch", isAuth, isSeller, async (req, res) => {
         return res.send(error);
     }
 });
-
-App.listen(process.env.PORT || 5000)
