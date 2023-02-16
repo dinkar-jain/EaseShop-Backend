@@ -28,10 +28,7 @@ Mongoose.connect(MONGODB_URL, {
 const App = Express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-App.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
-}));
+App.use(cors());
 App.use(bodyParser.json({ limit: "50mb" }));
 
 App.post("/API/Users/SignUp", async (req, res) => {
