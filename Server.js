@@ -228,7 +228,7 @@ App.get("/API/Orders", isAuth, async (req, res) => {
             return {
                 ...order._doc,
                 paid: order.dispatchedDate ?
-                    new Date(order.dispatchedDate).getTime() + 1000 * 60 * 60 * 24 * 1 > new Date().getTime() ?
+                    new Date(order.dispatchedDate).getTime() + 1000 * 60 * 60 * 24 * 2 > new Date().getTime() ?
                         "Paid" :
                         order.paid ? "Paid" : "Not Paid"
                     : order.paid ? "Paid" : "Not Paid",
